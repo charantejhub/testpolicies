@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <title>Hiding Form Fields based on Multiple Selections (Multi-Select Dropdown)</title>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <form id="myForm">
+    <label for="CompanyName">Company Name:</label>
+    <input type="text" id="CompanyName" name="CompanyName"><br><br>
+    <label for="FlexOrgID">Flexera OrgID:</label>
+    <input type="text" id="FlexOrgID" name="FlexOrgID"><br><br>
+    <label for="PolicyCatagory">Policy Catagory:</label>
+    <select id="PolicyCatagory" name="PolicyCatagory" multiple onchange="toggleFields()">
+      <option value="Cost_Optimization_Policy">Cost Optimization Policy</option>
+      <option value="Security_policy"> Security policy </option>
+    </select>
+    <br><br>
+    <div id="field1" class="hidden">
+      <label for="field1Input">Choose Policy:</label>
+      <select id="selectOption1" name= "Policy_type" multiple onchange="toggleFields1()">
+        <option value="Idle_Compute_Instances">Idle Compute Instances</option>
+        <option value="Unused_Volumes">Un-used Volumes</option>
+        <option value="Unused_IP">Un-used IP's</option>
+      </select>
+      <div id="field11" class="hidden"><br><br>
+        <label>Aggrigate ID</label>
+        <input type="text" id="field1Input" name="Aggrigate ID">
+        <label>Frequency</label>
+        <select id="selectOption1" name="Frequency">
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+        </select>
+        <label>Unused CPU Threshold</label>
+        <input type="text" id="Unused_CPU_Threshold" name="Unused_CPU_Threshold<">
+        <label>Unused Memory Threshold</label>
+        <input type="text" id="Unused_Memory_Threshold" name="Unused_Memory_Threshold">
+      </div>
+      <div id="field12" class="hidden"><br><br>
+        <label>Aggrigate ID</label>
+        <input type="text" id="field1Input" name="field1Input">
+        <label>Frequency</label>
+        <select id="selectOption1" name="Frequency">
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+        </select>
+        <label>Unused Days</label>
+        <input type="text" id="field1Input" name="field1Input">
+      </div>
+      <br><br>
+    </div>
+    <div id="field2" class="hidden">
+      <label for="field2Input">Field 2:</label>
+      <input type="text" id="field2Input" name="field2Input">
+      <br><br>
+    </div>
+    <div id="field3" class="hidden">
+      <label for="field3Input">Field 3:</label>
+      <input type="text" id="field3Input" name="field3Input">
+      <br><br>
+    </div>
+    <input value="Submit" type="submit">
+  </form>
+  <script>
+    function toggleFields() {
+      var selectOption = document.getElementById("PolicyCatagory");
+      var field1 = document.getElementById("field1");
+      var field2 = document.getElementById("field2");
+      var field3 = document.getElementById("field3");
+
+      var selectedOptions = Array.from(selectOption.options).filter(option => option.selected).map(option => option.value);
+
+      if (selectedOptions.includes("Cost_Optimization_Policy")) {
+        field1.classList.remove("hidden");
+      } else {
+        field1.classList.add("hidden");
+      }
+
+      if (selectedOptions.includes("Security_policy")) {
+        field2.classList.remove("hidden");
+      } else {
+        field2.classList.add("hidden");
+      }
+
+    }
+
+    function toggleFields1() {
+      var selectOption = document.getElementById("selectOption1");
+      var field11 = document.getElementById("field11");
+      var field12 = document.getElementById("field12");
+      var field13 = document.getElementById("field13");
+
+
+      var selectedOptions = Array.from(selectOption.options).filter(option => option.selected).map(option => option.value);
+
+      if (selectedOptions.includes("Idle_Compute_Instances")) {
+        field11.classList.remove("hidden");
+      } else {
+        field11.classList.add("hidden");
+      }
+
+      if (selectedOptions.includes("Unused_Volumes")) {
+        field12.classList.remove("hidden");
+      } else {
+        field12.classList.add("hidden");
+      }
+
+      if (selectedOptions.includes("Unused_IP")) {
+        field13.classList.remove("hidden");
+      } else {
+        field13.classList.add("hidden");
+      }
+    }
+  </script>
+
+  <script>
+      const form = document.querySelector("#myForm")
+      console.log(form)
+      form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Create an object to store the form data
+        var formData = {};
+
+        // Loop through all the form elements
+        var inputs = this.elements;
+        for (var i = 0; i < inputs.length; i++) {
+          var input = inputs[i];
+          if (input.type !== "submit") {
+            formData[input.name] = input.value; // Store the field name and value in the object
+          }
+        }
+
+        // Convert the form data object to JSON string
+        var jsonData = JSON.stringify(formData);
+
+        // Perform your desired action with the JSON data, such as sending it to the backend
+        console.log(formData);
+        // formData = {
+        //  companyName: "",
+        //  flexId: '',
+        //  policyCat: '',
+        //  policies: [
+        //    { name: Un - used volumes, ...},
+        //    { name: Un - used volumes, ...},
+        //    { name: Un - used volumes, ...}
+        //  ]
+        // }
+
+        //formData.policies.forEach(policy => {
+          const body = {
+          "all_projects": false,
+          "project_ids": [137169],
+          "credentials": {   
+              "auth_aws": "xyz_AWS_STS",
+              "auth_flexera": "xyz_AWS_OAuth2"
+            },
+          "description": "This policy checks AWS for unused IP Addresses and, optionally, deletes them",
+            "dry_run": false,
+            "frequency": "daily",
+            "name": "AWS Unused IP Addresses",
+            "severity": "low",
+            "skip_approvals": false,
+            "template_href": "/api/governance/orgs/34193/published_templates/5f29b1778779a100010f5165"
+          }
+          // You can use AJAX or fetch to send the JSON data to the backend here
+          fetch('https://governance-3.rightscale.com/api/governance/orgs/35316/policy_aggregates/64a2e7dacfb28d000166a356', {
+            method: "patch",
+            headers: {
+              'Api-Version': '1.0',
+              'Authorization': 'Bearer eyJraWQiOiJUajhBVDdEWlc0bFZNYlVMalB5cm9SYUxtUzA2cjcybmxjMW9MZTBZWTZZIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjFld1NjZnJhLU5OajRLQVVQTm55dXBNN3dBUU41RmZkQjdaTkN5d1cxaWcub2FyMmllNnF4cEtKUWxLVnMzNTciLCJpc3MiOiJodHRwczovL3NlY3VyZS5mbGV4ZXJhLmNvbS9vYXV0aDIvYXVzMWNrYnRkM0dTVXNFVnEzNTciLCJhdWQiOiJhcGkuZmxleGVyYS5jb20iLCJpYXQiOjE2ODg2NTUzNTIsImV4cCI6MTY4ODY1ODk1MiwiY2lkIjoiMG9hMWNraG5zdjFKRnhqcnYzNTciLCJ1aWQiOiIwMHVubHRkNGdlT3pZWGlkOTM1NyIsInNjcCI6WyJvZmZsaW5lX2FjY2VzcyJdLCJhdXRoX3RpbWUiOjE2Njk4MzQxOTksInN1YiI6InUtMTc0Mjc5Iiwic3NvbyI6W10sInVzZXIiOjE3NDI3OX0.Oyn1ELg2UgnW22R8qST-s17zNiXY1QdHbmmkdMFZhB8ZoiHp9_8iNljFNGSiSuG7vfq3drJLD77ZJR9Kro6vlfiAkEdZ85u_SDEBDZ7brWP1h8P0XuicfT2KN591ccq92PaBdTDXAFIVFglv0ScL6NLr2I8RNXfrYqDGt6WowLdOmzJH95blAfjxh-UNMMgSzbOe3yaC07i-j3gtssUYBKfYTTevr-zZjrSriO569R920WXXwB_d28rjNIcYR8CPkeIKXC8cs2GlTf4mEL08_cxQAu0Czg4F_mr-HpKSOCrN4GaVJohx1If6fPey25wEKCz7jY-u2MxqB_ePSXOY2g',
+              'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify(body)
+            })
+              .then(response => response.json()).then(data => console.log(data)).catch(error => console.log(error))
+          
+        //})
+
+        // Optionally, reset the form after submission
+        this.reset();
+      });
+    </script>
+</body>
+</html>

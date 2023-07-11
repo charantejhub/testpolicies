@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    function toggleFields() {
+      var selectOption = document.getElementById("PolicyCatagory");
+      var field1 = document.getElementById("field1");
+      var field2 = document.getElementById("field2");
+      var field3 = document.getElementById("field3");
+
+      var selectedOptions = Array.from(selectOption.options).filter(option => option.selected).map(option => option.value);
+
+      if (selectedOptions.includes("option1")) {
+        field1.classList.remove("hidden");
+      } else {
+        field1.classList.add("hidden");
+      }
+
+      if (selectedOptions.includes("option2")) {
+        field2.classList.remove("hidden");
+      } else {
+        field2.classList.add("hidden");
+      }
+
+    }
+
+    function toggleFields1() {
+      var selectOption = document.getElementById("selectOption1");
+      var field11 = document.getElementById("field11");
+      var field12 = document.getElementById("field12");
+      var field13 = document.getElementById("field13");
+
+
+      var selectedOptions = Array.from(selectOption.options).filter(option => option.selected).map(option => option.value);
+
+      if (selectedOptions.includes("option11")) {
+        field11.classList.remove("hidden");
+      } else {
+        field11.classList.add("hidden");
+      }
+
+      if (selectedOptions.includes("option12")) {
+        field12.classList.remove("hidden");
+      } else {
+        field12.classList.add("hidden");
+      }
+
+      if (selectedOptions.includes("option13")) {
+        field13.classList.remove("hidden");
+      } else {
+        field13.classList.add("hidden");
+      }
+    }
+  </script>
+  <title>Hiding Form Fields based on Multiple Selections (Multi-Select Dropdown)</title>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <form id="myForm">
+    <label for="CompanyName">Company Name:</label>
+    <input type="text" id="CompanyName" name="CompanyName"><br><br>
+    <label for="CompanyName">Flexera OrgID:</label>
+    <input type="text" id="CompanyName" name="CompanyName"><br><br>
+    <label for="PolicyCatagory">Policy Catagory:</label>
+    <select id="PolicyCatagory" multiple onchange="toggleFields()">
+      <option value="option1">Cost Optimization Policy</option>
+      <option value="option2"> Security policy </option>
+    </select>
+    <br><br>
+    <div id="field1" class="hidden">
+      <label for="field1Input">Choose Policy:</label>
+      <select id="selectOption1" multiple onchange="toggleFields1()">
+        <option value="option11">Idle Compute Instances</option>
+        <option value="option12">Un-used Volumes</option>
+        <option value="option13">Un-used IP's</option>
+      </select>
+      <div id="field11" class="hidden"><br><br>
+        <label>Aggrigate ID</label>
+        <input type="text" id="field1Input" name="field1Input">
+        <label>Frequency</label>
+        <select id="selectOption1">
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+        </select>
+        <label>Unused CPU Threshold</label>
+        <input type="text" id="field1Input" name="field1Input">
+        <label>Unused Memory Threshold</label>
+        <input type="text" id="field1Input" name="field1Input">
+      </div>
+      <div id="field12" class="hidden"><br><br>
+        <label>Aggrigate ID</label>
+        <input type="text" id="field1Input" name="field1Input">
+        <label>Frequency</label>
+        <select id="selectOption1">
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+        </select>
+        <label>Unused Days</label>
+        <input type="text" id="field1Input" name="field1Input">
+      </div>
+      <br><br>
+    </div>
+    <div id="field2" class="hidden">
+      <label for="field2Input">Field 2:</label>
+      <input type="text" id="field2Input" name="field2Input">
+      <br><br>
+    </div>
+    <div id="field3" class="hidden">
+      <label for="field3Input">Field 3:</label>
+      <input type="text" id="field3Input" name="field3Input">
+      <br><br>
+    </div>
+    <input value="Submit" type="submit">
+  </form>
+</body>
+</html>
